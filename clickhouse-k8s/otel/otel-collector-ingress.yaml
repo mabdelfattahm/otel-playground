@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-otel-collector
+  namespace: ingress
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+spec:
+  rules:
+  - host: collector.otel.local.signoz
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: otel-collector-external-service
+            port:
+              number: 4317
+  - host: jaeger.otel.local.signoz
+    http:
+      paths:
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: otel-collector-external-service
+            port:
+              number: 14268
+  ingressClassName: public

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: load-hotrod
+  name: load-hotrod
+spec:
+  ports:
+    - name: "8089"
+      port: 8089
+      targetPort: 8089
+  selector:
+    io.kompose.service: load-hotrod
+status:
+  loadBalancer: {}

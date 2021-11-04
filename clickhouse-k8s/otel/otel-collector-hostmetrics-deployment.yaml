@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: otel-collector-hostmetrics
+  name: otel-collector-hostmetrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: otel-collector-hostmetrics
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: otel-collector-hostmetrics
+    spec:
+      containers:
+        - args:
+            - --config=/etc/otel-collector-config-hostmetrics.yaml
+            - --mem-ballast-size-mib=683
+          image: signoz/otelcontribcol:0.4.0
+          name: otel-collector-hostmetrics
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/otel-collector-config-hostmetrics.yaml
+              name: otel-collector-hostmetrics-cm0
+              subPath: otel-collector-config-hostmetrics.yaml
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: otel-collector-config-hostmetrics.yaml
+                path: otel-collector-config-hostmetrics.yaml
+            name: otel-collector-hostmetrics-cm0
+          name: otel-collector-hostmetrics-cm0
+status: {}

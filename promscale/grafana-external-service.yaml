@@ -1,0 +1,29 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: grafana-external-service
+  namespace: ingress
+spec:
+  type: ExternalName
+  externalName: tobs-grafana.default.svc.cluster.local
+  ports:
+  - port: 80
+---
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: ingress-grafana
+  namespace: ingress
+spec:
+  rules:
+  - host: grafana.promscale.lo
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grafana-external-service
+              port: 
+                number: 80
+

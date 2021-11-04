@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: hotrod
+  name: hotrod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: hotrod
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: hotrod
+    spec:
+      containers:
+        - args:
+            - all
+          env:
+            - name: JAEGER_ENDPOINT
+              value: http://otel-collector:14268/api/traces
+          image: jaegertracing/example-hotrod:latest
+          name: hotrod
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}

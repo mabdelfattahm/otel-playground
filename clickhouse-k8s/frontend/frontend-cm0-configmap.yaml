@@ -1,0 +1,11 @@
+apiVersion: v1
+data:
+  nginx-config.conf: "server {\n    listen       3000;\n    server_name  _;\n    \n    gzip on;\n    gzip_static on;    \n    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;\n    gzip_proxied  any;\n    gzip_vary on;\n    gzip_comp_level 6;\n    gzip_buffers 16 8k;\n    gzip_http_version 1.1; \n\n    location / {\n    root   /usr/share/nginx/html;\n    index  index.html index.htm;\n    try_files $uri $uri/ /index.html;\n    }\n    location /api {\n    proxy_pass http://query-service:8080/api;\n    \n    }\n\n    # redirect server error pages to the static page /50x.html\n    #\n    error_page   500 502 503 504  /50x.html;\n    location = /50x.html {\n    root   /usr/share/nginx/html;\n    }\n}"
+kind: ConfigMap
+metadata:
+  annotations:
+    use-subpath: "true"
+  creationTimestamp: null
+  labels:
+    io.kompose.service: frontend
+  name: frontend-cm0

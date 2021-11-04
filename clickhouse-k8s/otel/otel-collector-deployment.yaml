@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: otel-collector
+  name: otel-collector
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      io.kompose.service: otel-collector
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: otel-collector
+    spec:
+      containers:
+        - args:
+            - --config=/etc/otel-collector-config.yaml
+            - --mem-ballast-size-mib=2000
+          image: signoz/otelcontribcol:0.4.0
+          name: otel-collector
+          ports:
+            - containerPort: 1777
+            - containerPort: 8888
+            - containerPort: 14268
+            - containerPort: 55678
+            - containerPort: 4317
+            - containerPort: 13133
+          resources: {}
+          volumeMounts:
+            - mountPath: /etc/otel-collector-config.yaml
+              name: otel-collector-cm0
+              subPath: otel-collector-config.yaml
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            items:
+              - key: otel-collector-config.yaml
+                path: otel-collector-config.yaml
+            name: otel-collector-cm0
+          name: otel-collector-cm0
+status: {}

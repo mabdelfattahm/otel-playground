@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: otel-collector-external-service
+  namespace: ingress
+spec:
+  type: ExternalName
+  externalName: otel-collector.signoz.svc.cluster.local
+  ports:
+  - port: 4317
+  - port: 14268

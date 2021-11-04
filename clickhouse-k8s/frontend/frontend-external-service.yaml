@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: frontend-external-service
+  namespace: ingress
+spec:
+  type: ExternalName
+  externalName: frontend.signoz.svc.cluster.local
+  ports:
+  - port: 4317
